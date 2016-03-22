@@ -81,7 +81,7 @@ object CorePlugin extends GeneratorPlugin with SBTProjectFiles with FrontendPath
          |    jQ(document).ready((_: Element) => {
          |      val appRoot = jQ("#${settings.htmlRootId}").get(0)
          |      if (appRoot.isEmpty) {
-         |        logger.error("Application root element not found! Check you index.html file!")
+         |        logger.error("Application root element not found! Check your index.html file!")
          |      } else {
          |        applicationInstance.run(appRoot.get)$FrontendAppInitPlaceholder
          |      }
