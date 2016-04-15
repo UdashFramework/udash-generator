@@ -142,6 +142,15 @@ object RPCPlugin extends GeneratorPlugin with SBTProjectFiles with FrontendPaths
          |    val config = new DefaultAtmosphereServiceConfig[MainServerRPC]((clientId) => new ExposesServerRPC[MainServerRPC](new ExposedRpcInterfaces()(clientId)))
          |    val framework = new DefaultAtmosphereFramework(config)
          |
+         |    //Disabling all files scan during service auto-configuration,
+         |    //as it's quite time-consuming - a few seconds long.
+         |    //
+         |    //If it's really required, enable it, but at the cost of start-up overhead or some tuning has to be made.
+         |    //For that purpose, check what is going on in:
+         |    //- DefaultAnnotationProcessor
+         |    //- org.atmosphere.cpr.AtmosphereFramework.autoConfigureService
+         |    framework.allowAllClassesScan(false)
+         |
          |    framework.init()
          |
          |    val atmosphereHolder = new ServletHolder(new RpcServlet(framework))
