@@ -13,7 +13,7 @@ import scala.annotation.tailrec
 
 trait DecisionMaker {
   /** Should return decision with filled response option. */
-  def makeDecision[T](decision: Decision[T]): Decision[T]
+  def makeDecision[T](decision: Decision[T], current: GeneratorSettings): Decision[T]
 }
 
 case class Configuration(plugins: Seq[GeneratorPlugin], settings: GeneratorSettings)
@@ -25,7 +25,7 @@ class ConfigurationBuilder(decisionMaker: DecisionMaker) {
     def _build(plugins: Seq[GeneratorPlugin], settings: GeneratorSettings)(decisions: List[Decision[_]]): Configuration = {
       if (decisions.isEmpty) Configuration(plugins, settings)
       else {
-        val response = decisionMaker.makeDecision(decisions.head)
+        val response = decisionMaker.makeDecision(decisions.head, settings)
         val errors: Option[String] = response.validator()
         if (errors.isDefined) throw InvalidConfigDecisionResponse(errors.get)
         _build(

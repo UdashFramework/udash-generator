@@ -10,7 +10,7 @@ import scala.io.StdIn
 class CmdDecisionMaker extends DecisionMaker {
   private val yesAnswers = Seq("yes", "y", "true", "t")
 
-  override def makeDecision[T](d: Decision[T]): Decision[T] = {
+  override def makeDecision[T](d: Decision[T], current: GeneratorSettings): Decision[T] = {
     try {
       val response: Decision[T] = d match {
         case decision@RootDirectory(_) =>
@@ -22,7 +22,7 @@ class CmdDecisionMaker extends DecisionMaker {
         case decision@Organization(_) =>
           Organization(Some(askForString("Organization", decision.default)))
         case decision@RootPackage(_) =>
-          RootPackage(Some(askForPackage("Root package", decision.default)))
+          RootPackage(Some(askForPackage("Root package", current.organization.split('.'))))
         case decision@ProjectTypeSelect(_) =>
           ProjectTypeSelect(Some(askForSelection("Project type", decision.default, decision.options)))
         case decision@StdProjectTypeModulesSelect(_) =>
@@ -50,9 +50,9 @@ class CmdDecisionMaker extends DecisionMaker {
     } catch {
       case InvalidConfigDecisionResponse(ex) =>
         println(ex)
-        makeDecision(d)
+        makeDecision(d, current)
       case _: Exception =>
-        makeDecision(d)
+        makeDecision(d, current)
     }
   }
 
