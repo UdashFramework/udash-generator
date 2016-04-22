@@ -151,8 +151,9 @@ object CorePlugin extends GeneratorPlugin with SBTProjectFiles with FrontendPath
       s"""package ${settings.rootPackage.mkPackage()}.${settings.viewsSubPackage.mkPackage()}
          |
          |import io.udash._
-         |import ${settings.rootPackage.mkPackage()}.{RootState, IndexState}
+         |import ${settings.rootPackage.mkPackage()}.RootState
          |import org.scalajs.dom.Element
+         |import scalatags.JsDom.tags2.main$FrontendImportsPlaceholder
          |
          |object RootViewPresenter extends DefaultViewPresenterFactory[RootState.type](() => new RootView)
          |
@@ -163,8 +164,13 @@ object CorePlugin extends GeneratorPlugin with SBTProjectFiles with FrontendPath
          |  private var child: Element = div().render
          |
          |  private val content = div(
-         |    a(href := IndexState.url)(h1("${settings.projectName}")),
-         |    child
+         |    $FrontendStyledHeaderPlaceholder
+         |    main$FrontendStylesMainPlaceholder(
+         |      div$FrontendStylesBodyPlaceHolder(
+         |        h1("${settings.projectName}"),
+         |        child
+         |      )
+         |    )$FrontendStyledFooterPlaceholder
          |  ).render
          |
          |  override def getTemplate: Element = content
@@ -184,7 +190,7 @@ object CorePlugin extends GeneratorPlugin with SBTProjectFiles with FrontendPath
          |
          |import io.udash._
          |import ${settings.rootPackage.mkPackage()}._
-         |import org.scalajs.dom.Element
+         |import org.scalajs.dom.Element$FrontendImportsPlaceholder
          |
          |object IndexViewPresenter extends DefaultViewPresenterFactory[IndexState.type](() => new IndexView)
          |
@@ -193,9 +199,27 @@ object CorePlugin extends GeneratorPlugin with SBTProjectFiles with FrontendPath
          |  import scalatags.JsDom.all._
          |
          |  private val content = div(
-         |    "Thank you for choosing Udash! Take a look at following demo pages:",
+         |    h2("Thank you for choosing Udash! Take a look at following demo pages:"),
+         |    ul$FrontendStylesStepsListPlaceholder(
+         |      $FrontendIndexMenuPlaceholder
+         |    ),
+         |    h3("Read more"),
          |    ul(
-         |      li(a(href := IndexState.url)("Index"))$FrontendIndexMenuPlaceholder
+         |      li(
+         |        a(${FrontendStylesLinkBlackPlaceholder}href := "http://udash.io/", target := "_blank")("Visit Udash Homepage.")
+         |      ),
+         |      li(
+         |        a(${FrontendStylesLinkBlackPlaceholder}href := "http://guide.udash.io/", target := "_blank")("Read more in Udash Guide.")
+         |      ),
+         |      li(
+         |        a(${FrontendStylesLinkBlackPlaceholder}href := "https://www.scala-js.org/", target := "_blank")("Read more about Scala.js.")
+         |      ),
+         |      li(
+         |        a(${FrontendStylesLinkBlackPlaceholder}href := "https://japgolly.github.io/scalacss/book/", target := "_blank")("Read more about ScalaCSS")
+         |      ),
+         |      li(
+         |        a(${FrontendStylesLinkBlackPlaceholder}href := "http://www.lihaoyi.com/scalatags/", target := "_blank")("Read more about ScalaTags")
+         |      )
          |    )
          |  ).render
          |

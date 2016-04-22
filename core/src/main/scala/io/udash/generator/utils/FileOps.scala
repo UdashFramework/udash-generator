@@ -11,7 +11,7 @@ import scala.util.matching.Regex
 trait FileOps {
   /** Writes `content` into `file`. */
   protected def writeFile(file: File)(content: String) = {
-    new PrintWriter(file) {
+    new PrintWriter(file, "UTF-8") {
       write(content)
       close()
     }
@@ -28,7 +28,7 @@ trait FileOps {
   /** Replaces all parts of `file` matching `regex` with `replacement`. */
   protected def replaceInFile(file: File)(regex: String, replacement: String) = {
     val current: String = readWholeFile(file)
-    new PrintWriter(file) {
+    new PrintWriter(file, "UTF-8") {
       write(current.replaceAll(regex, replacement))
       close()
     }

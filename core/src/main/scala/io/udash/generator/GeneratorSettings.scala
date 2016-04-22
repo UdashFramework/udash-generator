@@ -49,6 +49,10 @@ case class GeneratorSettings(rootDirectory: File,
   /** Udash DevGuide root URL. */
   //TODO: add developer guide url
   //def udashDevGuide: String = ""
+
+  /** Assets images */
+  def imageResourcePath = "/images/"
+  def assetsImages = Seq("icon_avsystem.png", "icon_github.png", "icon_stackoverflow.png", "udash_logo.png", "udash_logo_m.png")
 }
 
 sealed trait ProjectType

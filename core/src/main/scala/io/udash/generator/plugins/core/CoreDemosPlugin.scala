@@ -31,8 +31,8 @@ object CoreDemosPlugin extends GeneratorPlugin with SBTProjectFiles with Fronten
 
     appendOnPlaceholder(indexViewScala)(FrontendIndexMenuPlaceholder,
       s""",
-         |      li(a(href := $state().url)("Binding demo")),
-         |      li(a(href := $state("From index").url)("Binding demo with URL argument"))""".stripMargin)
+         |      li(a(${FrontendStylesLinkBlackPlaceholder}href := $state().url)("Binding demo")),
+         |      li(a(${FrontendStylesLinkBlackPlaceholder}href := $state("From index").url)("Binding demo with URL argument"))""".stripMargin)
   }
 
   private def createDemoView(rootPackage: File, settings: GeneratorSettings): String = {
@@ -65,7 +65,7 @@ object CoreDemosPlugin extends GeneratorPlugin with SBTProjectFiles with Fronten
          |
          |import io.udash._
          |import ${settings.rootPackage.mkPackage()}.$stateName
-         |import org.scalajs.dom.Element
+         |import org.scalajs.dom.Element$FrontendImportsPlaceholder
          |
          |case class BindingDemoViewPresenter(urlArg: String) extends DefaultViewPresenterFactory[$stateName](() => {
          |  import ${settings.rootPackage.mkPackage()}.Context._
@@ -78,13 +78,15 @@ object CoreDemosPlugin extends GeneratorPlugin with SBTProjectFiles with Fronten
          |  import scalatags.JsDom.all._
          |
          |  private val content = div(
-         |    div(
+         |    h2(
          |      "You can find this demo source code in: ",
          |      i("${settings.rootPackage.mkPackage()}.${settings.viewsSubPackage.mkPackage()}.BindingDemoView")
          |    ),
          |    h3("Example"),
          |    TextInput(model, placeholder := "Type something..."),
-         |    div("You typed: ", bind(model))
+         |    p("You typed: ", bind(model)),
+         |    h3("Read more"),
+         |    a$FrontendStylesLinkBlackPlaceholder(href := "http://guide.udash.io/#/frontend/bindings", target := "_blank")("Read more in Udash Guide.")
          |  ).render
          |
          |  override def getTemplate: Element = content
