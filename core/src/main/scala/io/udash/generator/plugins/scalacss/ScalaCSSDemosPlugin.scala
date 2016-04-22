@@ -3,12 +3,16 @@ package io.udash.generator.plugins.scalacss
 import java.io.File
 
 import io.udash.generator.plugins._
+import io.udash.generator.plugins.core.CoreDemosPlugin
+import io.udash.generator.plugins.rpc.RPCDemosPlugin
 import io.udash.generator.plugins.sbt.SBTProjectFiles
 import io.udash.generator.plugins.utils.{FrontendPaths, UtilPaths}
 import io.udash.generator.utils._
 import io.udash.generator.{FrontendOnlyProject, GeneratorPlugin, GeneratorSettings, StandardProject}
 
 object ScalaCSSDemosPlugin extends GeneratorPlugin with SBTProjectFiles with FrontendPaths with UtilPaths {
+
+  override val dependencies = Seq(RPCDemosPlugin, CoreDemosPlugin)
 
   override def run(settings: GeneratorSettings): GeneratorSettings = {
     val rootPck: File = settings.projectType match {

@@ -10,6 +10,9 @@ import io.udash.generator.utils._
 import io.udash.generator.{FrontendOnlyProject, GeneratorPlugin, GeneratorSettings, StandardProject}
 
 object RPCDemosPlugin extends GeneratorPlugin with SBTProjectFiles with FrontendPaths with UtilPaths {
+
+  override val dependencies = Seq(RPCPlugin)
+
   override def run(settings: GeneratorSettings): GeneratorSettings = {
     val rootPck: File = settings.projectType match {
       case FrontendOnlyProject =>

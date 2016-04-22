@@ -12,6 +12,9 @@ import io.udash.generator.{FrontendOnlyProject, GeneratorPlugin, GeneratorSettin
   * Prepares SBT modules configuration.
   */
 object SBTModulesPlugin extends GeneratorPlugin with SBTProjectFiles with FrontendPaths with UtilPaths {
+
+  override val dependencies = Seq(SBTBootstrapPlugin)
+
   override def run(settings: GeneratorSettings): GeneratorSettings = {
     settings.projectType match {
       case FrontendOnlyProject =>
