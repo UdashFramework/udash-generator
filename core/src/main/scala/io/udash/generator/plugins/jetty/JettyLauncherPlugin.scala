@@ -4,12 +4,15 @@ import java.io.File
 
 import io.udash.generator.exceptions.InvalidConfiguration
 import io.udash.generator.plugins._
-import io.udash.generator.plugins.sbt.SBTProjectFiles
+import io.udash.generator.plugins.sbt.{SBTModulesPlugin, SBTProjectFiles}
 import io.udash.generator.plugins.utils.{FrontendPaths, UtilPaths}
 import io.udash.generator.utils._
 import io.udash.generator.{FrontendOnlyProject, GeneratorPlugin, GeneratorSettings, StandardProject}
 
 object JettyLauncherPlugin extends GeneratorPlugin with SBTProjectFiles with FrontendPaths with UtilPaths {
+
+  override val dependencies = Seq(SBTModulesPlugin)
+
   override def run(settings: GeneratorSettings): GeneratorSettings = {
     settings.projectType match {
       case FrontendOnlyProject =>

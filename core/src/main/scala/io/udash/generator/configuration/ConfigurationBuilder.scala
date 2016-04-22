@@ -10,6 +10,7 @@ import io.udash.generator.plugins.sbt.{SBTBootstrapPlugin, SBTModulesPlugin}
 import io.udash.generator.plugins.scalacss.ScalaCSSDemosPlugin
 
 import scala.annotation.tailrec
+import scala.collection.mutable
 
 trait DecisionMaker {
   /** Should return decision with filled response option. */
@@ -35,7 +36,24 @@ class ConfigurationBuilder(decisionMaker: DecisionMaker) {
       }
     }
 
-    _build(Seq(), GeneratorSettings(null, false, null, null, null, null))(startingDecisions)
+    def dependenciesOrder(plugins: Seq[GeneratorPlugin]): Seq[GeneratorPlugin] = {
+      val visited = mutable.Set.empty[GeneratorPlugin]
+      val builder = mutable.ArrayBuffer[GeneratorPlugin]()
+
+      def visit(plugin: GeneratorPlugin): Unit =
+        if (!visited.contains(plugin)) {
+          visited += plugin
+          plugin.dependencies.filter(plugins.contains).foreach(visit)
+          builder.prepend(plugin)
+        }
+
+      plugins.foreach(visit)
+      builder.reverseIterator.toSeq
+    }
+
+    val configuration = _build(Seq(), GeneratorSettings(null, false, null, null, null, null))(startingDecisions)
+    val sortedPlugins = dependenciesOrder(configuration.plugins)
+    configuration.copy(plugins = sortedPlugins)
   }
 
   private def selectPlugins(response: Decision[_]): Seq[GeneratorPlugin] = {

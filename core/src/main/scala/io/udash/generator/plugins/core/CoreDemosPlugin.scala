@@ -10,6 +10,8 @@ import io.udash.generator.{FrontendOnlyProject, GeneratorPlugin, GeneratorSettin
 
 object CoreDemosPlugin extends GeneratorPlugin with SBTProjectFiles with FrontendPaths with UtilPaths {
 
+  override val dependencies = Seq(CorePlugin)
+
   override def run(settings: GeneratorSettings): GeneratorSettings = {
     val rootPck: File = settings.projectType match {
       case FrontendOnlyProject =>

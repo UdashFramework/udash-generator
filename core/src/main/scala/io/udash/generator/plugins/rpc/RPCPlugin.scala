@@ -4,12 +4,16 @@ import java.io.File
 
 import io.udash.generator.exceptions.InvalidConfiguration
 import io.udash.generator.plugins._
+import io.udash.generator.plugins.jetty.JettyLauncherPlugin
 import io.udash.generator.plugins.sbt.SBTProjectFiles
 import io.udash.generator.plugins.utils.{FrontendPaths, UtilPaths}
 import io.udash.generator.utils._
 import io.udash.generator.{FrontendOnlyProject, GeneratorPlugin, GeneratorSettings, StandardProject}
 
 object RPCPlugin extends GeneratorPlugin with SBTProjectFiles with FrontendPaths with UtilPaths {
+
+  override val dependencies = Seq(JettyLauncherPlugin)
+
   val rpcDir = "rpc"
 
   override def run(settings: GeneratorSettings): GeneratorSettings = {

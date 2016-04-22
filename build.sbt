@@ -2,7 +2,7 @@ name := "udash-generator"
 
 version in ThisBuild := "0.2.0-SNAPSHOT"
 organization in ThisBuild := "io.udash"
-scalaVersion in ThisBuild := "2.11.7"
+scalaVersion in ThisBuild := "2.11.8"
 
 lazy val generator = project.in(file("."))
   .aggregate(core, cmd)
