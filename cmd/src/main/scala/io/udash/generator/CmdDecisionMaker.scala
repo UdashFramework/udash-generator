@@ -80,6 +80,6 @@ class CmdDecisionMaker extends DecisionMaker {
     val optionsPresentation = options.zipWithIndex.map{
       case decision@(opt, idx) => s"  ${idx+1}. $opt \n"
     }.mkString
-    ask(s"$prompt [${options.indexOf(default)}]:\n${optionsPresentation}Select: ", default)(r => options(Integer.parseInt(r) - 1))
+    ask(s"$prompt [${options.indexOf(default) + 1}]:\n${optionsPresentation}Select: ", default)(r => options(Integer.parseInt(r) - 1))
   }
 }

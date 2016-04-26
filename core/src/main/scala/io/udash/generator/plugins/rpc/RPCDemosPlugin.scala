@@ -32,7 +32,7 @@ object RPCDemosPlugin extends GeneratorPlugin with SBTProjectFiles with Frontend
 
     appendOnPlaceholder(indexViewScala)(FrontendIndexMenuPlaceholder,
       s""",
-         |      li(a(href := $state.url)("RPC demo"))""".stripMargin)
+         |      li(a(${FrontendStylesLinkBlackPlaceholder}href := $state.url)("RPC demo"))""".stripMargin)
   }
 
   private def createDemoView(rootPackage: File, settings: GeneratorSettings): String = {
@@ -63,7 +63,7 @@ object RPCDemosPlugin extends GeneratorPlugin with SBTProjectFiles with Frontend
          |
          |import io.udash._
          |import ${settings.rootPackage.mkPackage()}.$stateName
-         |import org.scalajs.dom.Element
+         |import org.scalajs.dom.Element$FrontendImportsPlaceholder
          |
          |import scala.util.{Success, Failure}
          |
@@ -88,13 +88,15 @@ object RPCDemosPlugin extends GeneratorPlugin with SBTProjectFiles with Frontend
          |  import scalatags.JsDom.all._
          |
          |  private val content = div(
-         |    div(
+         |    h2(
          |      "You can find this demo source code in: ",
          |      i("${settings.rootPackage.mkPackage()}.${settings.viewsSubPackage.mkPackage()}.RPCDemoView")
          |    ),
          |    h3("Example"),
          |    TextInput(input, placeholder := "Type your name..."),
-         |    div("Server response: ", bind(serverResponse))
+         |    p("Server response: ", bind(serverResponse)),
+         |    h3("Read more"),
+         |    a$FrontendStylesLinkBlackPlaceholder(href := "http://guide.udash.io/#/rpc", target := "_blank")("Read more in Udash Guide.")
          |  ).render
          |
          |  override def getTemplate: Element = content

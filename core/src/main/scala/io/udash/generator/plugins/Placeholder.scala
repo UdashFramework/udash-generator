@@ -32,5 +32,14 @@ case object FrontendStatesRegistryPlaceholder   extends Placeholder("udash-gener
 case object FrontendIndexMenuPlaceholder        extends Placeholder("udash-generator-frontend-index-menu")
 case object FrontendContextPlaceholder          extends Placeholder("udash-generator-frontend-context")
 case object FrontendAppInitPlaceholder          extends Placeholder("udash-generator-frontend-app-init")
+case object FrontendImportsPlaceholder          extends Placeholder("udash-generator-frontend-imports")
+
+case object FrontendStyledHeaderPlaceholder     extends Placeholder("udash-generator-frontend-styled-header")
+case object FrontendStyledFooterPlaceholder     extends Placeholder("udash-generator-frontend-styled-footer")
+
+case object FrontendStylesMainPlaceholder       extends Placeholder("udash-generator-frontend-styles-main")
+case object FrontendStylesBodyPlaceHolder       extends Placeholder("udash-generator-frontend-styles-body")
+case object FrontendStylesLinkBlackPlaceholder  extends Placeholder("udash-generator-frontend-styles-link-black")
+case object FrontendStylesStepsListPlaceholder  extends Placeholder("udash-generator-frontend-styles-steps-list")
 
 case object BackendAppServerPlaceholder         extends Placeholder("udash-generator-backend-app-server")

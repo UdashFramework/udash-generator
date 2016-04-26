@@ -16,10 +16,11 @@ object PlaceholdersCleanPlugin extends GeneratorPlugin {
 
   private def cleanDirectory(dir: File): Unit =
     dir.listFiles()
-      .foreach(f =>
+      .foreach(f => {
+        val filename = f.getName.toLowerCase()
         if (f.isDirectory) cleanDirectory(f)
-        else cleanFile(f)
-      )
+        else if (filename.endsWith("scala") || filename.endsWith("sbt") || filename.endsWith("html")) cleanFile(f)
+      })
 
   private def cleanFile(file: File): Unit = {
     removeFromFile(file)("/\\*<<udash-generator.*?>>\\*/")
