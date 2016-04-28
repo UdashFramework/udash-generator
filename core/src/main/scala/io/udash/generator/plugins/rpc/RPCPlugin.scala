@@ -35,21 +35,17 @@ object RPCPlugin extends GeneratorPlugin with SBTProjectFiles with FrontendPaths
 
     requireFilesExist(Seq(sbtDepsFile))
 
-    appendOnPlaceholder(sbtDepsFile)(DependenciesVariablesPlaceholder,
-      s"""
-         |  val udashRPCVersion = "${settings.udashRPCVersion}"""".stripMargin)
-
     appendOnPlaceholder(sbtDepsFile)(DependenciesFrontendPlaceholder,
       s""",
-         |    "io.udash" %%% "udash-rpc-frontend" % udashRPCVersion""".stripMargin)
+         |    "io.udash" %%% "udash-rpc-frontend" % udashVersion""".stripMargin)
 
     appendOnPlaceholder(sbtDepsFile)(DependenciesCrossPlaceholder,
       s""",
-         |    "io.udash" % "udash-rpc-shared" % udashRPCVersion""".stripMargin)
+         |    "io.udash" %%% "udash-rpc-shared" % udashVersion""".stripMargin)
 
     appendOnPlaceholder(sbtDepsFile)(DependenciesBackendPlaceholder,
       s""",
-         |    "io.udash" % "udash-rpc-backend" % udashRPCVersion,
+         |    "io.udash" %% "udash-rpc-backend" % udashVersion,
          |    "org.eclipse.jetty.websocket" % "websocket-server" % jettyVersion""".stripMargin)
   }
 
@@ -65,22 +61,25 @@ object RPCPlugin extends GeneratorPlugin with SBTProjectFiles with FrontendPaths
     writeFile(clientRPCScala)(
       s"""package ${settings.rootPackage.mkPackage()}.$rpcDir
          |
+         |import com.avsystem.commons.rpc.RPC
          |import io.udash.rpc._
          |
-         |trait MainClientRPC extends ClientRPC {
+         |@RPC
+         |trait MainClientRPC {
          |  def push(number: Int): Unit
          |}
-         |
        """.stripMargin
     )
 
     writeFile(serverRPCScala)(
       s"""package ${settings.rootPackage.mkPackage()}.$rpcDir
          |
+         |import com.avsystem.commons.rpc.RPC
          |import io.udash.rpc._
          |import scala.concurrent.Future
          |
-         |trait MainServerRPC extends RPC {
+         |@RPC
+         |trait MainServerRPC {
          |  def hello(name: String): Future[String]
          |  def pushMe(): Unit
          |}
@@ -110,7 +109,7 @@ object RPCPlugin extends GeneratorPlugin with SBTProjectFiles with FrontendPaths
          |
          |object ClientRPC {
          |  def apply(target: ClientRPCTarget)(implicit ec: ExecutionContext): MainClientRPC = {
-         |    new DefaultClientRPC(target, AsRealRPC[MainClientRPC]).get
+         |    new DefaultClientRPC[MainClientRPC](target).get
          |  }
          |}
          |
@@ -142,8 +141,9 @@ object RPCPlugin extends GeneratorPlugin with SBTProjectFiles with FrontendPaths
          |  private val atmosphereHolder = {
          |    import io.udash.rpc._
          |    import ${settings.rootPackage.mkPackage()}.$rpcDir._
+         |    import scala.concurrent.ExecutionContext.Implicits.global
          |
-         |    val config = new DefaultAtmosphereServiceConfig[MainServerRPC]((clientId) => new ExposesServerRPC[MainServerRPC](new ExposedRpcInterfaces()(clientId)))
+         |    val config = new DefaultAtmosphereServiceConfig[MainServerRPC]((clientId) => new DefaultExposesServerRPC[MainServerRPC](new ExposedRpcInterfaces()(clientId)))
          |    val framework = new DefaultAtmosphereFramework(config)
          |
          |    //Disabling all files scan during service auto-configuration,
