@@ -1,6 +1,6 @@
 package io.udash.generator.plugins.scalacss
 
-import java.io.{File, FileWriter, PrintWriter}
+import java.io.File
 import javax.imageio.ImageIO
 
 import io.udash.generator.plugins._
@@ -225,7 +225,7 @@ object ScalaCSSDemosPlugin extends GeneratorPlugin with SBTProjectFiles with Fro
          |    h3("Read more"),
          |    ul(
          |      li(
-         |        a(DemoStyles.underlineLinkBlack)(href := "http://guide.udash.io/#/frontend/templates", target := "_blank")("Read more in Udash Guide.")
+         |        a(DemoStyles.underlineLinkBlack)(href := "${settings.udashDevGuide}#/frontend/templates", target := "_blank")("Read more in Udash Guide.")
          |      ),
          |      li(
          |       a(DemoStyles.underlineLinkBlack)(href := "https://japgolly.github.io/scalacss/book/", target := "_blank")("Read more in ScalaCSS docs.")

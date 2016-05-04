@@ -29,16 +29,18 @@ object CorePlugin extends GeneratorPlugin with SBTProjectFiles with FrontendPath
     requireFilesExist(Seq(dependenciesScala(settings)))
 
     appendOnPlaceholder(dependenciesScala(settings))(DependenciesVariablesPlaceholder,
-      s"""val udashCoreVersion = "${settings.udashCoreVersion}"
-         |val logbackVersion = "${settings.logbackVersion}"""".stripMargin)
+      s"""val udashVersion = "${settings.udashVersion}"
+         |  val udashJQueryVersion = "${settings.udashJQueryVersion}"
+         |  val logbackVersion = "${settings.logbackVersion}"""".stripMargin)
 
     appendOnPlaceholder(dependenciesScala(settings))(DependenciesCrossPlaceholder,
       s""",
-         |    "io.udash" % "udash-core-shared" % udashCoreVersion""".stripMargin)
+         |    "io.udash" %%% "udash-core-shared" % udashVersion""".stripMargin)
 
     appendOnPlaceholder(dependenciesScala(settings))(DependenciesFrontendPlaceholder,
       s""",
-         |    "io.udash" %%% "udash-core-frontend" % udashCoreVersion""".stripMargin)
+         |    "io.udash" %%% "udash-core-frontend" % udashVersion,
+         |    "io.udash" %%% "udash-jquery" % udashJQueryVersion""".stripMargin)
 
     appendOnPlaceholder(dependenciesScala(settings))(DependenciesBackendPlaceholder,
       s""",
@@ -209,7 +211,7 @@ object CorePlugin extends GeneratorPlugin with SBTProjectFiles with FrontendPath
          |        a(${FrontendStylesLinkBlackPlaceholder}href := "http://udash.io/", target := "_blank")("Visit Udash Homepage.")
          |      ),
          |      li(
-         |        a(${FrontendStylesLinkBlackPlaceholder}href := "http://guide.udash.io/", target := "_blank")("Read more in Udash Guide.")
+         |        a(${FrontendStylesLinkBlackPlaceholder}href := "${settings.udashDevGuide}", target := "_blank")("Read more in Udash Guide.")
          |      ),
          |      li(
          |        a(${FrontendStylesLinkBlackPlaceholder}href := "https://www.scala-js.org/", target := "_blank")("Read more about Scala.js.")

@@ -96,7 +96,7 @@ object RPCDemosPlugin extends GeneratorPlugin with SBTProjectFiles with Frontend
          |    TextInput(input, placeholder := "Type your name..."),
          |    p("Server response: ", bind(serverResponse)),
          |    h3("Read more"),
-         |    a$FrontendStylesLinkBlackPlaceholder(href := "http://guide.udash.io/#/rpc", target := "_blank")("Read more in Udash Guide.")
+         |    a$FrontendStylesLinkBlackPlaceholder(href := "${settings.udashDevGuide}#/rpc", target := "_blank")("Read more in Udash Guide.")
          |  ).render
          |
          |  override def getTemplate: Element = content

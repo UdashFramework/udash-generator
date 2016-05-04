@@ -86,7 +86,7 @@ object CoreDemosPlugin extends GeneratorPlugin with SBTProjectFiles with Fronten
          |    TextInput(model, placeholder := "Type something..."),
          |    p("You typed: ", bind(model)),
          |    h3("Read more"),
-         |    a$FrontendStylesLinkBlackPlaceholder(href := "http://guide.udash.io/#/frontend/bindings", target := "_blank")("Read more in Udash Guide.")
+         |    a$FrontendStylesLinkBlackPlaceholder(href := "${settings.udashDevGuide}#/frontend/bindings", target := "_blank")("Read more in Udash Guide.")
          |  ).render
          |
          |  override def getTemplate: Element = content
