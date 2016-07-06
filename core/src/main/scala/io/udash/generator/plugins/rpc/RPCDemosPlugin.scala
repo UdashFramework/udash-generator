@@ -93,7 +93,7 @@ object RPCDemosPlugin extends GeneratorPlugin with SBTProjectFiles with Frontend
          |      i("${settings.rootPackage.mkPackage()}.${settings.viewsSubPackage.mkPackage()}.RPCDemoView")
          |    ),
          |    h3("Example"),
-         |    TextInput(input, placeholder := "Type your name..."),
+         |    TextInput.debounced(input, placeholder := "Type your name..."),
          |    p("Server response: ", bind(serverResponse)),
          |    h3("Read more"),
          |    a$FrontendStylesLinkBlackPlaceholder(href := "${settings.udashDevGuide}#/rpc", target := "_blank")("Read more in Udash Guide.")
