@@ -83,7 +83,7 @@ object CoreDemosPlugin extends GeneratorPlugin with SBTProjectFiles with Fronten
          |      i("${settings.rootPackage.mkPackage()}.${settings.viewsSubPackage.mkPackage()}.BindingDemoView")
          |    ),
          |    h3("Example"),
-         |    TextInput(model, placeholder := "Type something..."),
+         |    TextInput.debounced(model, placeholder := "Type something..."),
          |    p("You typed: ", bind(model)),
          |    h3("Read more"),
          |    a$FrontendStylesLinkBlackPlaceholder(href := "${settings.udashDevGuide}#/frontend/bindings", target := "_blank")("Read more in Udash Guide.")
