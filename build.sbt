@@ -1,6 +1,6 @@
 name := "udash-generator"
 
-version in ThisBuild := "0.2.0"
+version in ThisBuild := "0.3.0"
 organization in ThisBuild := "io.udash"
 scalaVersion in ThisBuild := "2.11.8"
 
