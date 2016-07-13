@@ -19,7 +19,9 @@ object SBTBootstrapPlugin extends GeneratorPlugin with SBTProjectFiles {
                     udashBuildScala(settings), dependenciesScala(settings)))
 
     writeFile(buildSbt(settings))(
-      s"""name := "${settings.projectName}"
+      s"""import com.lihaoyi.workbench.Plugin._
+         |
+         |name := "${settings.projectName}"
          |
          |version in ThisBuild := "0.1.0-SNAPSHOT"
          |scalaVersion in ThisBuild := "${settings.scalaVersion}"
@@ -46,6 +48,8 @@ object SBTBootstrapPlugin extends GeneratorPlugin with SBTProjectFiles {
     writeFile(pluginsSbt(settings))(
       s"""logLevel := Level.Warn
          |addSbtPlugin("org.scala-js" % "sbt-scalajs" % "${settings.scalaJSVersion}")
+         |
+         |addSbtPlugin("com.lihaoyi" % "workbench" % "0.2.3")
          |
          |""".stripMargin)
 
