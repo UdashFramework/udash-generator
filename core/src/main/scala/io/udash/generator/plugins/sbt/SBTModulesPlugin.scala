@@ -29,6 +29,30 @@ object SBTModulesPlugin extends GeneratorPlugin with SBTProjectFiles with Fronte
     settings
   }
 
+  private def scalajsWorkbenchSettings(settings: GeneratorSettings) =
+    s""".settings(workbenchSettings:_*)
+       |  .settings(
+       |    bootSnippet := "${settings.rootPackage.mkPackage()}.Init().main();",
+       |    updatedJS := {
+       |      var files: List[String] = Nil
+       |      ((crossTarget in Compile).value / StaticFilesDir ** "*.js").get.foreach {
+       |        (x: File) =>
+       |          streams.value.log.info("workbench: Checking " + x.getName)
+       |          FileFunction.cached(streams.value.cacheDirectory / x.getName, FilesInfo.lastModified, FilesInfo.lastModified) {
+       |            (f: Set[File]) =>
+       |              val fsPath = f.head.getAbsolutePath.drop(new File("").getAbsolutePath.length)
+       |              files = fsPath :: files
+       |              f
+       |          }(Set(x))
+       |      }
+       |      files
+       |    },
+       |    //// use either refreshBrowsers OR updateBrowsers
+       |    // refreshBrowsers <<= refreshBrowsers triggeredBy (compileStatics in Compile)
+       |    updateBrowsers <<= updateBrowsers triggeredBy (compileStatics in Compile)
+       |  )
+       |""".stripMargin
+
   /**
     * Creates modules dirs:<br/>
     * * src/main/assets<br/>
@@ -76,7 +100,8 @@ object SBTModulesPlugin extends GeneratorPlugin with SBTProjectFiles with Fronte
           |      (crossTarget in(Compile, packageMinifiedJSDependencies)).value / StaticFilesDir / WebContent / "scripts" / "${settings.frontendDepsJs}",
           |    artifactPath in(Compile, packageScalaJSLauncher) :=
           |      (crossTarget in(Compile, packageScalaJSLauncher)).value / StaticFilesDir / WebContent / "scripts" / "${settings.frontendInitJs}"$FrontendSettingsPlaceholder
-          |  )$FrontendModulePlaceholder
+          |  )${scalajsWorkbenchSettings(settings)}
+          |  $FrontendModulePlaceholder
           |
           |""".stripMargin)
 
@@ -177,28 +202,8 @@ object SBTModulesPlugin extends GeneratorPlugin with SBTProjectFiles with Fronte
          |      (crossTarget in(Compile, packageMinifiedJSDependencies)).value / StaticFilesDir / WebContent / "scripts" / "${settings.frontendDepsJs}",
          |    artifactPath in(Compile, packageScalaJSLauncher) :=
          |      (crossTarget in(Compile, packageScalaJSLauncher)).value / StaticFilesDir / WebContent / "scripts" / "${settings.frontendInitJs}"$FrontendSettingsPlaceholder
-         |  )
-         |  .settings(workbenchSettings:_*)
-         |  .settings(
-         |    bootSnippet := "${settings.rootPackage.mkPackage()}.Init().main();",
-         |    updatedJS := {
-         |      var files: List[String] = Nil
-         |      ((crossTarget in Compile).value / StaticFilesDir ** "*.js").get.foreach {
-         |        (x: File) =>
-         |          streams.value.log.info("workbench: Checking " + x.getName)
-         |          FileFunction.cached(streams.value.cacheDirectory / x.getName, FilesInfo.lastModified, FilesInfo.lastModified) {
-         |            (f: Set[File]) =>
-         |              val fsPath = f.head.getAbsolutePath.drop(new File("").getAbsolutePath.length)
-         |              files = fsPath :: files
-         |              f
-         |          }(Set(x))
-         |      }
-         |      files
-         |    },
-         |    //// use either refreshBrowsers OR updateBrowsers
-         |    // refreshBrowsers <<= refreshBrowsers triggeredBy (compileStatics in Compile)
-         |    updateBrowsers <<= updateBrowsers triggeredBy (compileStatics in Compile)
-         |  )$FrontendModulePlaceholder
+         |  )${scalajsWorkbenchSettings(settings)}
+         |  $FrontendModulePlaceholder
          |
          |""".stripMargin)
 
@@ -247,6 +252,8 @@ object SBTModulesPlugin extends GeneratorPlugin with SBTProjectFiles with Fronte
           |    <script src="scripts/${settings.frontendDepsFastJs}"></script>
           |    <script src="scripts/${settings.frontendImplFastJs}"></script>
           |    <script src="scripts/${settings.frontendInitJs}"></script>
+          |    <script src="http://localhost:12345/workbench.js"></script>
+          |
           |    $HTMLHeadPlaceholder
           |</head>
           |<body>
