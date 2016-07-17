@@ -249,9 +249,9 @@ object SBTModulesPlugin extends GeneratorPlugin with SBTProjectFiles with Fronte
           |    <meta charset="UTF-8">
           |    <title>${settings.projectName} - development</title>
           |
-          |    <script src="scripts/${settings.frontendDepsFastJs}"></script>
-          |    <script src="scripts/${settings.frontendImplFastJs}"></script>
-          |    <script src="scripts/${settings.frontendInitJs}"></script>
+          |    <script src="http://localhost:12345/frontend/target/UdashStatic/WebContent/scripts/${settings.frontendDepsFastJs}"></script>
+          |    <script src="http://localhost:12345/frontend/target/UdashStatic/WebContent/scripts/${settings.frontendImplFastJs}"></script>
+          |    <script src="http://localhost:12345/frontend/target/UdashStatic/WebContent/scripts/${settings.frontendInitJs}"></script>
           |    <script src="http://localhost:12345/workbench.js"></script>
           |
           |    $HTMLHeadPlaceholder
