@@ -27,6 +27,19 @@ In case of the frontend-only project, you can use the sbt compile command to com
 
 If you decided to create the standard project with the Jetty launcher, you can use the sbt run command to compile sources of your web application and start the Jetty server. When the server is started, you can see your web application on http://127.0.0.1:8080/.
 
-While developing, you can use the *~compile* task, which will automatically recompile changed source files.
-
 Read more in the [Udash Developer's Guide](http://guide.udash.io/#/bootstrapping/generators).
+
+### ScalaJS Workbench
+The [ScalaJS Workbench](https://github.com/lihaoyi/workbench) is enabled by default.
+While developing the frontend code will be recompiled and updated in the browser automatically when source files changes are saved.
+
+#### Frontend only project
+1. Execute `sbt ~compileStatics`.
+1. Open the web application thru the workbench server [http://localhost:12345/target/UdashStatic/WebContent/index.html](http://localhost:12345/target/UdashStatic/WebContent/index.html).
+
+#### Standard project
+1. Execute `sbt ~frontend/compileStatics`.
+1. Execute `sbt run`.
+1. Open the web application thru the app server [http://127.0.0.1:8080/](http://127.0.0.1:8080/).
+
+

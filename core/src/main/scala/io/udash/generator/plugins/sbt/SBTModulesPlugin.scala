@@ -41,7 +41,7 @@ object SBTModulesPlugin extends GeneratorPlugin with SBTProjectFiles with Fronte
        |          FileFunction.cached(streams.value.cacheDirectory / x.getName, FilesInfo.lastModified, FilesInfo.lastModified) {
        |            (f: Set[File]) =>
        |              val fsPath = f.head.getAbsolutePath.drop(new File("").getAbsolutePath.length)
-       |              files = "http://localhost:12345/" + fsPath :: files
+       |              files = "http://localhost:12345" + fsPath :: files
        |              f
        |          }(Set(x))
        |      }
@@ -66,7 +66,7 @@ object SBTModulesPlugin extends GeneratorPlugin with SBTProjectFiles with Fronte
     */
   private def generateFrontendOnlyProject(settings: GeneratorSettings): Unit = {
     createModulesDirs(Seq(settings.rootDirectory), settings)
-    createFrontendExtraDirs(settings.rootDirectory, settings)
+    createFrontendExtraDirs(settings.rootDirectory, settings, Option.empty)
 
     requireFilesExist(Seq(buildSbt(settings), projectDir(settings), udashBuildScala(settings), dependenciesScala(settings)))
     generateFrontendTasks(udashBuildScala(settings), indexDevHtml(settings.rootDirectory), indexProdHtml(settings.rootDirectory))
@@ -131,12 +131,6 @@ object SBTModulesPlugin extends GeneratorPlugin with SBTProjectFiles with Fronte
     * and appends `build.sbt` modules config with dependencies config in `project/Dependencies.scala`.
     */
   private def generateStandardProject(backend: File, shared: File, frontend: File, settings: GeneratorSettings): Unit = {
-    createModulesDirs(Seq(backend, shared, frontend), settings)
-    createFrontendExtraDirs(frontend, settings)
-
-    requireFilesExist(Seq(buildSbt(settings), projectDir(settings), udashBuildScala(settings), dependenciesScala(settings)))
-    generateFrontendTasks(udashBuildScala(settings), indexDevHtml(frontend), indexProdHtml(frontend))
-
     val rootModuleName = wrapValName(settings.projectName)
     val backendModuleName = wrapValName(backend.getName)
     val frontendModuleName = wrapValName(frontend.getName)
@@ -148,6 +142,14 @@ object SBTModulesPlugin extends GeneratorPlugin with SBTProjectFiles with Fronte
     val backendDepsName = wrapValName("backendDeps")
     val frontendDepsName = wrapValName("frontendDeps")
     val frontendJSDepsName = wrapValName("frontendJSDeps")
+
+    createModulesDirs(Seq(backend, shared, frontend), settings)
+    createFrontendExtraDirs(frontend, settings, Option(frontendModuleName))
+
+    requireFilesExist(Seq(buildSbt(settings), projectDir(settings), udashBuildScala(settings), dependenciesScala(settings)))
+    generateFrontendTasks(udashBuildScala(settings), indexDevHtml(frontend), indexProdHtml(frontend))
+
+
 
     appendFile(buildSbt(settings))(
       s"""def crossLibs(configuration: Configuration) =
@@ -234,14 +236,18 @@ object SBTModulesPlugin extends GeneratorPlugin with SBTProjectFiles with Fronte
     })
   }
 
-  private def createFrontendExtraDirs(frontend: File, settings: GeneratorSettings): Unit = {
+  private def createFrontendExtraDirs(frontend: File, settings: GeneratorSettings, frontendModuleName: Option[String]): Unit = {
     createDirs(Seq(images(frontend), fonts(frontend)))
 
     val indexDev: File = indexDevHtml(frontend)
     val indexProd: File = indexProdHtml(frontend)
 
-    createFiles(Seq(indexDev, indexProd), requireNotExists = true)
+    val frontendDirectoryName = frontendModuleName match {
+      case None => ""
+      case Some(name) => name + "/"
+    }
 
+    createFiles(Seq(indexDev, indexProd), requireNotExists = true)
     writeFile(indexDev)(
       s"""<!DOCTYPE html>
           |<html>
@@ -249,9 +255,9 @@ object SBTModulesPlugin extends GeneratorPlugin with SBTProjectFiles with Fronte
           |    <meta charset="UTF-8">
           |    <title>${settings.projectName} - development</title>
           |
-          |    <script src="http://localhost:12345/frontend/target/UdashStatic/WebContent/scripts/${settings.frontendDepsFastJs}"></script>
-          |    <script src="http://localhost:12345/frontend/target/UdashStatic/WebContent/scripts/${settings.frontendImplFastJs}"></script>
-          |    <script src="http://localhost:12345/frontend/target/UdashStatic/WebContent/scripts/${settings.frontendInitJs}"></script>
+          |    <script src="http://localhost:12345/${frontendDirectoryName}target/UdashStatic/WebContent/scripts/${settings.frontendDepsFastJs}"></script>
+          |    <script src="http://localhost:12345/${frontendDirectoryName}target/UdashStatic/WebContent/scripts/${settings.frontendImplFastJs}"></script>
+          |    <script src="http://localhost:12345/${frontendDirectoryName}target/UdashStatic/WebContent/scripts/${settings.frontendInitJs}"></script>
           |    <script src="http://localhost:12345/workbench.js"></script>
           |
           |    $HTMLHeadPlaceholder
