@@ -41,7 +41,7 @@ object SBTModulesPlugin extends GeneratorPlugin with SBTProjectFiles with Fronte
        |          FileFunction.cached(streams.value.cacheDirectory / x.getName, FilesInfo.lastModified, FilesInfo.lastModified) {
        |            (f: Set[File]) =>
        |              val fsPath = f.head.getAbsolutePath.drop(new File("").getAbsolutePath.length)
-       |              files = fsPath :: files
+       |              files = "http://localhost:12345/" + fsPath :: files
        |              f
        |          }(Set(x))
        |      }
