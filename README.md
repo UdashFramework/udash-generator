@@ -36,11 +36,11 @@ The [ScalaJS Workbench](https://github.com/lihaoyi/workbench) is enabled by defa
 While developing the frontend code will be recompiled and updated in the browser automatically when source files changes are saved.
 
 #### Frontend only project
-1. Execute `sbt ~compileStatics`.
+1. Execute `sbt ~compile`.
 1. Open the web application thru the workbench server [http://localhost:12345/target/UdashStatic/WebContent/index.html](http://localhost:12345/target/UdashStatic/WebContent/index.html).
 
 #### Standard project
-1. Execute `sbt ~frontend/compileStatics`.
+1. Execute `sbt ~frontend/compile`.
 1. Execute `sbt run`.
 1. Open the web application thru the app server [http://127.0.0.1:8080/](http://127.0.0.1:8080/).
 
