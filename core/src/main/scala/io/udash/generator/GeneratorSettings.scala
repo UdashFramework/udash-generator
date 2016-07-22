@@ -17,7 +17,8 @@ case class GeneratorSettings(rootDirectory: File,
                              projectName: String,
                              organization: String,
                              projectType: ProjectType,
-                             rootPackage: Seq[String]) {
+                             rootPackage: Seq[String],
+                             shouldEnableJsWorkbench: Boolean) {
   /** Root package of views in frontend. */
   def viewsSubPackage: Seq[String] = Seq("views")
   /** Root package of styles in frontend. */
