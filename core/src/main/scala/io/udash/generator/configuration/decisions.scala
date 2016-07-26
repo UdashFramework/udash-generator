@@ -111,3 +111,6 @@ case class CreateRPCDemos(override val response: Option[Boolean] = None) extends
 
 /* If `true`, generator starts project generation process. */
 case class RunGenerator(override val response: Option[Boolean] = None) extends Decision[Boolean](true)
+
+/* If `true`, generator enables the app to use the JsWorkbench SBT Plugin during development. */
+case class EnableJsWorkbench(override val response: Option[Boolean] = None) extends Decision[Boolean](true)

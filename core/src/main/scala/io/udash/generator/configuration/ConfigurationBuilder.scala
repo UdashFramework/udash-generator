@@ -51,7 +51,7 @@ class ConfigurationBuilder(decisionMaker: DecisionMaker) {
       builder.reverseIterator.toSeq
     }
 
-    val configuration = _build(Seq(), GeneratorSettings(null, false, null, null, null, null))(startingDecisions)
+    val configuration = _build(Seq(), GeneratorSettings(null, false, null, null, null, null, false))(startingDecisions)
     val sortedPlugins = dependenciesOrder(configuration.plugins)
     configuration.copy(plugins = sortedPlugins)
   }
@@ -97,6 +97,8 @@ class ConfigurationBuilder(decisionMaker: DecisionMaker) {
         settings.copy(projectType = FrontendOnlyProject)
       case StdProjectTypeModulesSelect(Some(projectType)) =>
         settings.copy(projectType = projectType)
+      case EnableJsWorkbench(Some(enable)) =>
+        settings.copy(shouldEnableJsWorkbench = enable)
       case _ =>
         settings
     }
@@ -134,6 +136,7 @@ class ConfigurationBuilder(decisionMaker: DecisionMaker) {
       Organization(),
       RootPackage(),
       ProjectTypeSelect(),
+      EnableJsWorkbench(),
       RunGenerator()
     )
 }

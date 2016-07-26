@@ -42,6 +42,8 @@ class CmdDecisionMaker extends DecisionMaker {
           CreateRPC(Some(askForBoolean("Create RPC communication layer", decision.default)))
         case decision@CreateRPCDemos(_) =>
           CreateRPCDemos(Some(askForBoolean("Create RPC communication layer demos", decision.default)))
+        case decision@EnableJsWorkbench(_) =>
+          EnableJsWorkbench(Some(askForBoolean("Enable JsWorkbench usage", decision.default)))
         case decision@RunGenerator(_) =>
           RunGenerator(Some(askForBoolean("Start generation", decision.default)))
       }
