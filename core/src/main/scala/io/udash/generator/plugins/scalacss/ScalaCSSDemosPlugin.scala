@@ -13,6 +13,7 @@ import io.udash.generator.{FrontendOnlyProject, GeneratorPlugin, GeneratorSettin
 
 object ScalaCSSDemosPlugin extends GeneratorPlugin with SBTProjectFiles with FrontendPaths with UtilPaths {
 
+  val stateName = "DemoStylesState"
   override val dependencies = Seq(RPCDemosPlugin, CoreDemosPlugin)
 
   override def run(settings: GeneratorSettings): GeneratorSettings = {
@@ -30,8 +31,8 @@ object ScalaCSSDemosPlugin extends GeneratorPlugin with SBTProjectFiles with Fro
         frontendDir = settings.rootDirectory.subFile(frontend)
         imagesDir = images(settings.rootDirectory.subFile(frontend))
     }
-    val stateName = createDemoStyles(rootPck, settings)
     addIndexLink(rootPck, stateName)
+    createDemoStyles(rootPck, settings)
 
     createImages(imagesDir, settings)
     prepareHtml(frontendDir, settings)
@@ -84,7 +85,7 @@ object ScalaCSSDemosPlugin extends GeneratorPlugin with SBTProjectFiles with Fro
     })
   }
 
-  private def createDemoStyles(rootPackage: File, settings: GeneratorSettings): String = {
+  private def createDemoStyles(rootPackage: File, settings: GeneratorSettings): Unit = {
     val globalStylesScala = stylesPackageInSrc(rootPackage).subFile("GlobalStyles.scala")
     val demoStylesScala = stylesPackageInSrc(rootPackage).subFile("DemoStyles.scala")
 
@@ -121,8 +122,6 @@ object ScalaCSSDemosPlugin extends GeneratorPlugin with SBTProjectFiles with Fro
     val imageFactoryScala = componentsPackage.subFile("ImageFactory.scala")
     val headerScala = componentsPackage.subFile("Header.scala")
     val footerScala = componentsPackage.subFile("Footer.scala")
-
-    val stateName = "DemoStylesState"
 
     createDirs(Seq(stylesPackageInSrc(rootPackage), configPackage, componentsPackage, stylesConstantsPackage, stylesFontsPackage, stylesPartialsPackage, stylesUtilsPackage))
     createFiles(Seq(globalStylesScala, demoStylesScala, demoStylesViewScala, configScala, imageFactoryScala, headerScala, footerScala, stylesConstantsScala, stylesFontsScala, stylesHeaderScala, stylesFooterScala, stylesMediaQueriesScala, stylesStyleUtilsScala), requireNotExists = true)
@@ -1308,8 +1307,5 @@ object ScalaCSSDemosPlugin extends GeneratorPlugin with SBTProjectFiles with Fro
           |
           |object Image extends ImageFactory("assets/images")
           |""".stripMargin)
-
-
-    stateName
   }
 }
