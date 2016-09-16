@@ -88,7 +88,7 @@ object SBTModulesPlugin extends GeneratorPlugin with SBTProjectFiles with Fronte
           |    compileStatics := {
           |      IO.copyDirectory(sourceDirectory.value / "main/assets/fonts", crossTarget.value / StaticFilesDir / WebContent / "assets/fonts")
           |      IO.copyDirectory(sourceDirectory.value / "main/assets/images", crossTarget.value / StaticFilesDir / WebContent / "assets/images")
-          |      compileStaticsForRelease.value
+          |      val statics = compileStaticsForRelease.value
           |      (crossTarget.value / StaticFilesDir).***.get
           |    },
           |
@@ -185,14 +185,13 @@ object SBTModulesPlugin extends GeneratorPlugin with SBTProjectFiles with Fronte
          |    jsDependencies ++= $frontendJSDepsName.value,
          |    persistLauncher in Compile := true,
          |
-         |    compile <<= (compile in Compile),
+         |    compile <<= (compile in Compile).dependsOn(compileStatics),
          |    compileStatics := {
          |      IO.copyDirectory(sourceDirectory.value / "main/assets/fonts", crossTarget.value / StaticFilesDir / WebContent / "assets/fonts")
          |      IO.copyDirectory(sourceDirectory.value / "main/assets/images", crossTarget.value / StaticFilesDir / WebContent / "assets/images")
-         |      compileStaticsForRelease.value
+         |      val statics = compileStaticsForRelease.value
          |      (crossTarget.value / StaticFilesDir).***.get
          |    },
-         |    compileStatics <<= compileStatics.dependsOn(compile in Compile),
          |
          |    artifactPath in(Compile, fastOptJS) :=
          |      (crossTarget in(Compile, fastOptJS)).value / StaticFilesDir / WebContent / "scripts" / "${settings.frontendImplFastJs}",

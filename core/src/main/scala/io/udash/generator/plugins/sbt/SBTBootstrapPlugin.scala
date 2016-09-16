@@ -22,7 +22,9 @@ object SBTBootstrapPlugin extends GeneratorPlugin with SBTProjectFiles {
     val addJsWorkbenchPlugin = if (settings.shouldEnableJsWorkbench) s"""addSbtPlugin("com.lihaoyi" % "workbench" % "0.2.3")""" else ""
 
     writeFile(buildSbt(settings))(
-      s"""${importJsWorkbench}
+      s"""$importJsWorkbench
+         |import UdashBuild._
+         |import Dependencies._
          |
          |name := "${settings.projectName}"
          |
@@ -52,7 +54,7 @@ object SBTBootstrapPlugin extends GeneratorPlugin with SBTProjectFiles {
       s"""logLevel := Level.Warn
          |addSbtPlugin("org.scala-js" % "sbt-scalajs" % "${settings.scalaJSVersion}")
          |
-         |${addJsWorkbenchPlugin}
+         |$addJsWorkbenchPlugin
          |
          |""".stripMargin)
 
@@ -61,7 +63,7 @@ object SBTBootstrapPlugin extends GeneratorPlugin with SBTProjectFiles {
          |import sbt.Keys._
          |import sbt._
          |
-         |object UdashBuild extends Build {$UdashBuildPlaceholder}
+         |object UdashBuild {$UdashBuildPlaceholder}
          |
          |""".stripMargin)
 
@@ -69,7 +71,7 @@ object SBTBootstrapPlugin extends GeneratorPlugin with SBTProjectFiles {
       s"""import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
          |import sbt._
          |
-         |object Dependencies extends Build {$DependenciesPlaceholder}
+         |object Dependencies {$DependenciesPlaceholder}
          |
          |""".stripMargin)
 

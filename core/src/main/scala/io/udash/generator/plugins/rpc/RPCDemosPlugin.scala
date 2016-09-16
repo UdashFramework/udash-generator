@@ -97,9 +97,9 @@ object RPCDemosPlugin extends GeneratorPlugin with SBTProjectFiles with Frontend
          |    p("Server response: ", bind(serverResponse)),
          |    h3("Read more"),
          |    a$FrontendStylesLinkBlackPlaceholder(href := "${settings.udashDevGuide}#/rpc", target := "_blank")("Read more in Udash Guide.")
-         |  ).render
+         |  )
          |
-         |  override def getTemplate: Element = content
+         |  override def getTemplate: Modifier = content
          |
          |  override def renderChild(view: View): Unit = {}
          |}

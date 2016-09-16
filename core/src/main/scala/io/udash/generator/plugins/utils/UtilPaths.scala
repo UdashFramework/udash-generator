@@ -6,6 +6,8 @@ import io.udash.generator.GeneratorSettings
 import io.udash.generator.utils._
 
 trait UtilPaths {
+  def resources(module: File): File =
+    module.subFile(resourcesPathPart)
   def src(module: File): File =
     module.subFile(srcPathPart)
   def testSrc(module: File): File =
@@ -15,6 +17,7 @@ trait UtilPaths {
   def rootPackageInTestSrc(module: File, settings: GeneratorSettings): File =
     module.subFile(Seq(testSrcPathPart, packagePathPart(settings)).mkString(File.separator))
 
+  private val resourcesPathPart = Seq("src", "main", "resources").mkString(File.separator)
   private val srcPathPart = Seq("src", "main", "scala").mkString(File.separator)
   private val testSrcPathPart = Seq("src", "test", "scala").mkString(File.separator)
   private def packagePathPart(settings: GeneratorSettings) = settings.rootPackage.mkString(File.separator)

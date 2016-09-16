@@ -68,14 +68,17 @@ object JettyLauncherPlugin extends GeneratorPlugin with SBTProjectFiles with Fro
   }
 
   private def createJettyServer(rootPackage: File, settings: GeneratorSettings, backendModuleName: String): Unit = {
+    val resourcesDir = resources(settings.rootDirectory.subFile(backendModuleName))
+    val logbackXml = resourcesDir.subFile("logback.xml")
+
     val jettyDir = "jetty"
     val jettyPackage = rootPackage.subFile(jettyDir)
     val appServerScala = jettyPackage.subFile("ApplicationServer.scala")
     val launcherScala = rootPackage.subFile("Launcher.scala")
 
     requireFilesExist(Seq(rootPackage))
-    createDirs(Seq(jettyPackage))
-    createFiles(Seq(appServerScala, launcherScala))
+    createDirs(Seq(jettyPackage, resourcesDir))
+    createFiles(Seq(appServerScala, launcherScala, logbackXml))
 
     writeFile(appServerScala)(
       s"""package ${settings.rootPackage.mkPackage()}.$jettyDir
@@ -108,6 +111,30 @@ object JettyLauncherPlugin extends GeneratorPlugin with SBTProjectFiles with Fro
          |
        """.stripMargin
     )
+
+    writeFile(logbackXml)(
+      """<configuration>
+        |    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        |        <encoder>
+        |            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        |        </encoder>
+        |    </appender>
+        |
+        |    <timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss"/>
+        |
+        |    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        |        <file>logs/udash-guide-${bySecond}.log</file>
+        |        <append>true</append>
+        |        <encoder>
+        |            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        |        </encoder>
+        |    </appender>
+        |
+        |    <root level="info">
+        |        <appender-ref ref="STDOUT" />
+        |        <appender-ref ref="FILE" />
+        |    </root>
+        |</configuration>""".stripMargin)
 
     writeFile(launcherScala)(
       s"""package ${settings.rootPackage.mkPackage()}
