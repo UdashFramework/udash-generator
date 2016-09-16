@@ -230,9 +230,9 @@ object ScalaCSSDemosPlugin extends GeneratorPlugin with SBTProjectFiles with Fro
          |       a(DemoStyles.underlineLinkBlack)(href := "https://japgolly.github.io/scalacss/book/", target := "_blank")("Read more in ScalaCSS docs.")
          |     )
          |    )
-         |  ).render
+         |  )
          |
-         |  override def getTemplate: Element = content
+         |  override def getTemplate: Modifier = content
          |
          |  override def renderChild(view: View): Unit = {}
          |
@@ -279,13 +279,60 @@ object ScalaCSSDemosPlugin extends GeneratorPlugin with SBTProjectFiles with Fro
           |import ${settings.rootPackage.mkPackage()}.${settings.stylesSubPackage.mkPackage()}.${stylesUtilsPackage.getName}.{MediaQueries, StyleUtils}
           |
           |import scala.language.postfixOps
-          |import scalacss.Attr
+          |import scalacss.internal.{Attr, Literal}
           |import scalacss.Defaults._
           |
           |object GlobalStyles extends StyleSheet.Inline {
           |  import dsl._
           |
-          |  val reset = style(scalacss.ext.CssReset.meyer)
+          |  val reset = style(
+          |    unsafeRoot(\"\"\"html, body, div, span, applet, object, iframe,
+          |                 | h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+          |                 | a, abbr, acronym, address, big, cite, code,
+          |                 | del, dfn, em, img, ins, kbd, q, s, samp,
+          |                 | small, strike, strong, sub, sup, tt, var,
+          |                 | b, u, i, center,
+          |                 | dl, dt, dd, ol, ul, li,
+          |                 | fieldset, form, label, legend,
+          |                 | table, caption, tbody, tfoot, thead, tr, th, td,
+          |                 | article, aside, canvas, details, embed,
+          |                 | figure, figcaption, footer, header, hgroup,
+          |                 | menu, nav, output, ruby, section, summary,
+          |                 | time, mark, audio, video\"\"\".stripMargin.replaceAll("\\\\s+", ""))(
+          |      margin.`0`,
+          |      padding.`0`,
+          |      border.`0`,
+          |      fontSize(100 %%),
+          |      font := Literal.inherit,
+          |      verticalAlign.baseline
+          |    ),
+          |
+          |    unsafeRoot("article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section")(
+          |      display.block
+          |    ),
+          |
+          |    unsafeRoot("body")(
+          |      lineHeight(1)
+          |    ),
+          |
+          |    unsafeRoot("ol,ul")(
+          |      listStyle := none // TODO
+          |    ),
+          |
+          |    unsafeRoot ("blockquote, q")(
+          |      quotes.none
+          |    ),
+          |
+          |    unsafeRoot("blockquote:before, blockquote:after, q:before, q:after")(
+          |      content := "''",
+          |      content := none
+          |    ),
+          |
+          |    unsafeRoot("table")(
+          |      borderCollapse.collapse,
+          |      borderSpacing.`0`
+          |    )
+          |  )
           |
           |  val global = style(
           |    unsafeRoot("#application") (
@@ -579,7 +626,7 @@ object ScalaCSSDemosPlugin extends GeneratorPlugin with SBTProjectFiles with Fro
           |
           |import scala.concurrent.duration.FiniteDuration
           |import scala.language.postfixOps
-          |import scalacss.Compose
+          |import scalacss.internal.Compose
           |import scalacss.Defaults._
           |
           |object DemoStyles extends StyleSheet.Inline {
@@ -773,7 +820,7 @@ object ScalaCSSDemosPlugin extends GeneratorPlugin with SBTProjectFiles with Fro
     writeFile(stylesFontsScala)(
       s"""package ${settings.rootPackage.mkPackage()}.${settings.stylesSubPackage.mkPackage()}.${stylesFontsPackage.getName}
           |import scala.language.postfixOps
-          |import scalacss.AV
+          |import scalacss.internal.AV
           |import scalacss.Defaults._
           |
           |object UdashFonts extends StyleSheet.Inline {
@@ -1131,7 +1178,7 @@ object ScalaCSSDemosPlugin extends GeneratorPlugin with SBTProjectFiles with Fro
           |
           |import scala.concurrent.duration.FiniteDuration
           |import scala.language.postfixOps
-          |import scalacss.{AV, Attr, Length, ValueT}
+          |import scalacss.internal.{AV, Attr, Length, ValueT}
           |import scalacss.Defaults._
           |
           |object StyleUtils extends StyleSheet.Inline {

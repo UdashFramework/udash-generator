@@ -163,7 +163,7 @@ object CorePlugin extends GeneratorPlugin with SBTProjectFiles with FrontendPath
          |  import ${settings.rootPackage.mkPackage()}.Context._
          |  import scalatags.JsDom.all._
          |
-         |  private var child: Element = div().render
+         |  private val child: Element = div().render
          |
          |  private val content = div(
          |    $FrontendStyledHeaderPlaceholder
@@ -173,15 +173,14 @@ object CorePlugin extends GeneratorPlugin with SBTProjectFiles with FrontendPath
          |        child
          |      )
          |    )$FrontendStyledFooterPlaceholder
-         |  ).render
+         |  )
          |
-         |  override def getTemplate: Element = content
+         |  override def getTemplate: Modifier = content
          |
          |  override def renderChild(view: View): Unit = {
          |    import io.udash.wrappers.jquery._
-         |    val newChild = view.getTemplate
-         |    jQ(child).replaceWith(newChild)
-         |    child = newChild
+         |    jQ(child).children().remove()
+         |    view.getTemplate.applyTo(child)
          |  }
          |}
          |""".stripMargin
@@ -223,9 +222,9 @@ object CorePlugin extends GeneratorPlugin with SBTProjectFiles with FrontendPath
          |        a(${FrontendStylesLinkBlackPlaceholder}href := "http://www.lihaoyi.com/scalatags/", target := "_blank")("Read more about ScalaTags")
          |      )
          |    )
-         |  ).render
+         |  )
          |
-         |  override def getTemplate: Element = content
+         |  override def getTemplate: Modifier = content
          |
          |  override def renderChild(view: View): Unit = {}
          |}
@@ -246,9 +245,9 @@ object CorePlugin extends GeneratorPlugin with SBTProjectFiles with FrontendPath
          |
          |  private val content = h3(
          |    "URL not found!"
-         |  ).render
+         |  )
          |
-         |  override def getTemplate: Element = content
+         |  override def getTemplate: Modifier = content
          |
          |  override def renderChild(view: View): Unit = {}
          |}

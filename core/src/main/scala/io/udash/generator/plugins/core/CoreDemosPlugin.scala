@@ -87,9 +87,9 @@ object CoreDemosPlugin extends GeneratorPlugin with SBTProjectFiles with Fronten
          |    p("You typed: ", bind(model)),
          |    h3("Read more"),
          |    a$FrontendStylesLinkBlackPlaceholder(href := "${settings.udashDevGuide}#/frontend/bindings", target := "_blank")("Read more in Udash Guide.")
-         |  ).render
+         |  )
          |
-         |  override def getTemplate: Element = content
+         |  override def getTemplate: Modifier = content
          |
          |  override def renderChild(view: View): Unit = {}
          |}

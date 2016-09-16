@@ -9,7 +9,7 @@ lazy val generator = project.in(file("."))
   .settings(publishArtifact := false)
 
 lazy val core = project.in(file("core"))
-  .settings(libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.0-M15" % Test)
+  .settings(libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.0" % Test)
 
 lazy val cmd = project.in(file("cmd"))
   .dependsOn(core)
