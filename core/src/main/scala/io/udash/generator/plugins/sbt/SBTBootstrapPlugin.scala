@@ -41,7 +41,7 @@ object SBTBootstrapPlugin extends GeneratorPlugin with SBTProjectFiles {
          |  "-language:dynamics",
          |  "-Xfuture",
          |  "-Xfatal-warnings",
-         |  "-Xlint:_,-missing-interpolator,-adapted-args"
+         |  "-Xlint:-unused,_"
          |)
          |
          |""".stripMargin

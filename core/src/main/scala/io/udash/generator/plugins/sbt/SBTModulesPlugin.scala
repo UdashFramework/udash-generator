@@ -49,8 +49,8 @@ object SBTModulesPlugin extends GeneratorPlugin with SBTProjectFiles with Fronte
          |      files
          |    },
          |    //// use either refreshBrowsers OR updateBrowsers
-         |    // refreshBrowsers <<= refreshBrowsers triggeredBy (compileStatics in Compile)
-         |    updateBrowsers <<= updateBrowsers triggeredBy (compileStatics in Compile)
+         |    // refreshBrowsers := (refreshBrowsers triggeredBy (compileStatics in Compile)).value
+         |    updateBrowsers := (updateBrowsers triggeredBy (compileStatics in Compile)).value
          |  )
          |""".stripMargin
     else ""
@@ -82,9 +82,9 @@ object SBTModulesPlugin extends GeneratorPlugin with SBTProjectFiles with Fronte
           |  .settings(
           |    libraryDependencies ++= $depsName.value,
           |    jsDependencies ++= $depsJSName.value,
-          |    persistLauncher in Compile := true,
+          |    scalaJSUseMainModuleInitializer in Compile := true,
           |
-          |    compile <<= (compile in Compile).dependsOn(compileStatics),
+          |    compile := (compile in Compile).dependsOn(compileStatics).value,
           |    compileStatics := {
           |      IO.copyDirectory(sourceDirectory.value / "main/assets/fonts", crossTarget.value / StaticFilesDir / WebContent / "assets/fonts")
           |      IO.copyDirectory(sourceDirectory.value / "main/assets/images", crossTarget.value / StaticFilesDir / WebContent / "assets/images")
@@ -99,9 +99,7 @@ object SBTModulesPlugin extends GeneratorPlugin with SBTProjectFiles with Fronte
           |    artifactPath in(Compile, packageJSDependencies) :=
           |      (crossTarget in(Compile, packageJSDependencies)).value / StaticFilesDir / WebContent / "scripts" / "${settings.frontendDepsFastJs}",
           |    artifactPath in(Compile, packageMinifiedJSDependencies) :=
-          |      (crossTarget in(Compile, packageMinifiedJSDependencies)).value / StaticFilesDir / WebContent / "scripts" / "${settings.frontendDepsJs}",
-          |    artifactPath in(Compile, packageScalaJSLauncher) :=
-          |      (crossTarget in(Compile, packageScalaJSLauncher)).value / StaticFilesDir / WebContent / "scripts" / "${settings.frontendInitJs}"$FrontendSettingsPlaceholder
+          |      (crossTarget in(Compile, packageMinifiedJSDependencies)).value / StaticFilesDir / WebContent / "scripts" / "${settings.frontendDepsJs}"
           |  )${scalajsWorkbenchSettings(settings)}
           |  $FrontendModulePlaceholder
           |
@@ -183,9 +181,9 @@ object SBTModulesPlugin extends GeneratorPlugin with SBTProjectFiles with Fronte
          |    libraryDependencies ++= $frontendDepsName.value,
          |    crossLibs(Compile),
          |    jsDependencies ++= $frontendJSDepsName.value,
-         |    persistLauncher in Compile := true,
+         |    scalaJSUseMainModuleInitializer in Compile := true,
          |
-         |    compile <<= (compile in Compile).dependsOn(compileStatics),
+         |    compile := (compile in Compile).dependsOn(compileStatics).value,
          |    compileStatics := {
          |      IO.copyDirectory(sourceDirectory.value / "main/assets/fonts", crossTarget.value / StaticFilesDir / WebContent / "assets/fonts")
          |      IO.copyDirectory(sourceDirectory.value / "main/assets/images", crossTarget.value / StaticFilesDir / WebContent / "assets/images")
@@ -200,9 +198,7 @@ object SBTModulesPlugin extends GeneratorPlugin with SBTProjectFiles with Fronte
          |    artifactPath in(Compile, packageJSDependencies) :=
          |      (crossTarget in(Compile, packageJSDependencies)).value / StaticFilesDir / WebContent / "scripts" / "${settings.frontendDepsFastJs}",
          |    artifactPath in(Compile, packageMinifiedJSDependencies) :=
-         |      (crossTarget in(Compile, packageMinifiedJSDependencies)).value / StaticFilesDir / WebContent / "scripts" / "${settings.frontendDepsJs}",
-         |    artifactPath in(Compile, packageScalaJSLauncher) :=
-         |      (crossTarget in(Compile, packageScalaJSLauncher)).value / StaticFilesDir / WebContent / "scripts" / "${settings.frontendInitJs}"$FrontendSettingsPlaceholder
+         |      (crossTarget in(Compile, packageMinifiedJSDependencies)).value / StaticFilesDir / WebContent / "scripts" / "${settings.frontendDepsJs}"
          |  )${scalajsWorkbenchSettings(settings)}
          |  $FrontendModulePlaceholder
          |
@@ -251,14 +247,12 @@ object SBTModulesPlugin extends GeneratorPlugin with SBTProjectFiles with Fronte
         s"""
            |    <script src="http://localhost:12345/${frontendDirectoryName}target/UdashStatic/WebContent/scripts/${settings.frontendDepsFastJs}"></script>
            |    <script src="http://localhost:12345/${frontendDirectoryName}target/UdashStatic/WebContent/scripts/${settings.frontendImplFastJs}"></script>
-           |    <script src="http://localhost:12345/${frontendDirectoryName}target/UdashStatic/WebContent/scripts/${settings.frontendInitJs}"></script>
            |    <script src="http://localhost:12345/workbench.js"></script>
             """.stripMargin
       else
         s"""
            |    <script src="scripts/${settings.frontendDepsFastJs}"></script>
            |    <script src="scripts/${settings.frontendImplFastJs}"></script>
-           |    <script src="scripts/${settings.frontendInitJs}"></script>
             """.stripMargin
 
 
@@ -290,7 +284,6 @@ object SBTModulesPlugin extends GeneratorPlugin with SBTProjectFiles with Fronte
           |
           |    <script src="scripts/${settings.frontendDepsJs}"></script>
           |    <script src="scripts/${settings.frontendImplJs}"></script>
-          |    <script src="scripts/${settings.frontendInitJs}"></script>
           |    $HTMLHeadPlaceholder
           |</head>
           |<body>
@@ -321,7 +314,6 @@ object SBTModulesPlugin extends GeneratorPlugin with SBTProjectFiles with Fronte
          |        copyIndex(indexFile, outDir)
          |        (fullOptJS in Compile).value
          |        (packageMinifiedJSDependencies in Compile).value
-         |        (packageScalaJSLauncher in Compile).value
          |      }
          |    } else {
          |      Def.task {
@@ -329,7 +321,6 @@ object SBTModulesPlugin extends GeneratorPlugin with SBTProjectFiles with Fronte
          |        copyIndex(indexFile, outDir)
          |        (fastOptJS in Compile).value
          |        (packageJSDependencies in Compile).value
-         |        (packageScalaJSLauncher in Compile).value
          |      }
          |    }
          |  }
