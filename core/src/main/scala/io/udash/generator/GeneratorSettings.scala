@@ -24,12 +24,12 @@ case class GeneratorSettings(rootDirectory: File,
   /** Root package of styles in frontend. */
   def stylesSubPackage: Seq[String] = Seq("styles")
 
-  def scalaVersion: String = "2.11.8"
-  def sbtVersion: String = "0.13.12"
-  def scalaJSVersion: String = "0.6.12"
-  def scalaCSSVersion: String = "0.5.0"
-  def udashVersion: String = "0.4.0"
-  def udashJQueryVersion: String = "1.0.0"
+  def scalaVersion: String = "2.12.2"
+  def sbtVersion: String = "0.13.15"
+  def scalaJSVersion: String = "0.6.17"
+  def scalaCSSVersion: String = "0.5.3"
+  def udashVersion: String = "0.5.0"
+  def udashJQueryVersion: String = "1.0.1"
   def jettyVersion: String = "9.3.11.v20160721"
   def logbackVersion: String = "1.1.3"
 
@@ -44,8 +44,6 @@ case class GeneratorSettings(rootDirectory: File,
   def frontendDepsFastJs: String = "frontend-deps-fast.js"
   /** Generated JS file with dependencies code name (prod). */
   def frontendDepsJs: String = "frontend-deps.js"
-  /** Generated JS file with app launcher name (dev). */
-  def frontendInitJs: String = "frontend-init.js"
 
   /** Udash DevGuide root URL. */
   def udashDevGuide: String = "http://guide.udash.io/"

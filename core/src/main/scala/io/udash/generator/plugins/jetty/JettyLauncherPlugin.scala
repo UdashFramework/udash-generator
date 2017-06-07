@@ -39,10 +39,10 @@ object JettyLauncherPlugin extends GeneratorPlugin with SBTProjectFiles with Fro
     appendOnPlaceholder(sbtConfigFile)(BackendSettingsPlaceholder,
       s""",
          |
-         |    compile <<= (compile in Compile),
-         |    (compile in Compile) <<= (compile in Compile).dependsOn(copyStatics),
+         |    compile := (compile in Compile).value,
+         |    (compile in Compile) := (compile in Compile).dependsOn(copyStatics).value,
          |    copyStatics := IO.copyDirectory((crossTarget in $frontendModuleName).value / StaticFilesDir, (target in Compile).value / StaticFilesDir),
-         |    copyStatics <<= copyStatics.dependsOn(compileStatics in $frontendModuleName),
+         |    copyStatics := copyStatics.dependsOn(compileStatics in $frontendModuleName).value,
          |
          |    mappings in (Compile, packageBin) ++= {
          |      copyStatics.value

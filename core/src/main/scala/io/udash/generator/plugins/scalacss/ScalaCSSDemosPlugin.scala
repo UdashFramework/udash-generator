@@ -207,7 +207,7 @@ object ScalaCSSDemosPlugin extends GeneratorPlugin with SBTProjectFiles with Fro
          |case object DemoStylesViewPresenter extends DefaultViewPresenterFactory[$stateName.type](() => new DemoStylesView)
          |
          |class DemoStylesView extends View {
-         |  import scalacss.Defaults._
+         |  import scalacss.DevDefaults._
          |  import scalacss.ScalatagsCss._
          |  import scalatags.JsDom._
          |  import scalatags.JsDom.all._
@@ -259,7 +259,7 @@ object ScalaCSSDemosPlugin extends GeneratorPlugin with SBTProjectFiles with Fro
     appendOnPlaceholder(initScala)(FrontendAppInitPlaceholder,
       s"""
          |
-         |import scalacss.Defaults._
+         |import scalacss.DevDefaults._
          |import scalacss.ScalatagsCss._
          |import scalatags.JsDom._
          |import ${settings.rootPackage.mkPackage()}.${settings.stylesSubPackage.mkPackage()}.GlobalStyles
@@ -280,7 +280,7 @@ object ScalaCSSDemosPlugin extends GeneratorPlugin with SBTProjectFiles with Fro
           |
           |import scala.language.postfixOps
           |import scalacss.internal.{Attr, Literal}
-          |import scalacss.Defaults._
+          |import scalacss.DevDefaults._
           |
           |object GlobalStyles extends StyleSheet.Inline {
           |  import dsl._
@@ -627,7 +627,7 @@ object ScalaCSSDemosPlugin extends GeneratorPlugin with SBTProjectFiles with Fro
           |import scala.concurrent.duration.FiniteDuration
           |import scala.language.postfixOps
           |import scalacss.internal.Compose
-          |import scalacss.Defaults._
+          |import scalacss.DevDefaults._
           |
           |object DemoStyles extends StyleSheet.Inline {
           |  import dsl._
@@ -759,7 +759,7 @@ object ScalaCSSDemosPlugin extends GeneratorPlugin with SBTProjectFiles with Fro
 
     writeFile(stylesConstantsScala)(
       s"""package ${settings.rootPackage.mkPackage()}.${settings.stylesSubPackage.mkPackage()}.${stylesConstantsPackage.getName}
-          |import scalacss.Defaults._
+          |import scalacss.DevDefaults._
           |
           |object StyleConstants extends StyleSheet.Inline{
           |  import dsl._
@@ -821,7 +821,7 @@ object ScalaCSSDemosPlugin extends GeneratorPlugin with SBTProjectFiles with Fro
       s"""package ${settings.rootPackage.mkPackage()}.${settings.stylesSubPackage.mkPackage()}.${stylesFontsPackage.getName}
           |import scala.language.postfixOps
           |import scalacss.internal.AV
-          |import scalacss.Defaults._
+          |import scalacss.DevDefaults._
           |
           |object UdashFonts extends StyleSheet.Inline {
           |  import dsl._
@@ -862,7 +862,7 @@ object ScalaCSSDemosPlugin extends GeneratorPlugin with SBTProjectFiles with Fro
           |
           |import scala.concurrent.duration.FiniteDuration
           |import scala.language.postfixOps
-          |import scalacss.Defaults._
+          |import scalacss.DevDefaults._
           |
           |object HeaderStyles extends StyleSheet.Inline {
           |  import dsl._
@@ -1056,7 +1056,7 @@ object ScalaCSSDemosPlugin extends GeneratorPlugin with SBTProjectFiles with Fro
           |import ${settings.rootPackage.mkPackage()}.${settings.stylesSubPackage.mkPackage()}.${stylesUtilsPackage.getName}.{MediaQueries, StyleUtils}
           |
           |import scala.language.postfixOps
-          |import scalacss.Defaults._
+          |import scalacss.DevDefaults._
           |
           |object FooterStyles extends StyleSheet.Inline {
           |  import dsl._
@@ -1144,7 +1144,7 @@ object ScalaCSSDemosPlugin extends GeneratorPlugin with SBTProjectFiles with Fro
           |
           |import ${settings.rootPackage.mkPackage()}.${settings.stylesSubPackage.mkPackage()}.${stylesConstantsPackage.getName}.StyleConstants
           |
-          |import scalacss.Defaults._
+          |import scalacss.DevDefaults._
           |import scala.language.postfixOps
           |
           |object MediaQueries extends StyleSheet.Inline {
@@ -1179,7 +1179,7 @@ object ScalaCSSDemosPlugin extends GeneratorPlugin with SBTProjectFiles with Fro
           |import scala.concurrent.duration.FiniteDuration
           |import scala.language.postfixOps
           |import scalacss.internal.{AV, Attr, Length, ValueT}
-          |import scalacss.Defaults._
+          |import scalacss.DevDefaults._
           |
           |object StyleUtils extends StyleSheet.Inline {
           |  import dsl._
