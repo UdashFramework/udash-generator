@@ -26,7 +26,7 @@ case class GeneratorSettings(rootDirectory: File,
 
   def scalaVersion: String = "2.12.2"
   def sbtVersion: String = "0.13.15"
-  def scalaJSVersion: String = "0.6.17"
+  def scalaJSVersion: String = "0.6.18"
   def scalaCSSVersion: String = "0.5.3"
   def udashVersion: String = "0.5.0"
   def udashJQueryVersion: String = "1.0.1"
