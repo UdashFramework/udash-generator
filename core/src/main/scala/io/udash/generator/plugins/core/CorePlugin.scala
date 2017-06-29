@@ -78,11 +78,10 @@ object CorePlugin extends GeneratorPlugin with SBTProjectFiles with FrontendPath
          |  implicit val applicationInstance = new Application[RoutingState](routingRegistry, viewPresenterRegistry, RootState)$FrontendContextPlaceholder
          |}
          |
-         |object Init extends JSApp with StrictLogging {
+         |object Init extends StrictLogging {
          |  import Context._
          |
-         |  @JSExport
-         |  override def main(): Unit = {
+         |  def main(args: Array[String]): Unit = {
          |    jQ(document).ready((_: Element) => {
          |      val appRoot = jQ("#${settings.htmlRootId}").get(0)
          |      if (appRoot.isEmpty) {
